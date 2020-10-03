@@ -1,0 +1,23 @@
+<main role="main">
+  <nav class="navbar navbar-expand-xl fixed-top navbar-dark bg-dark">
+    <a class="navbar-brand" routerLink="">
+      Weather
+    </a>
+  </nav>
+
+  <div class="container">
+    <app-form (citiesChange)="onCitiesChange($event)"></app-form>
+    <hr/>
+    <div *ngIf="(cities | async).length > 0" class="results">
+      <app-table [cities]="(cities | async)"></app-table>
+      <app-bar-plot [cities]="(cities | async)"></app-bar-plot>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <hr/>
+  <div class="container">
+    <span class="text-muted">Made by Fábio Tomaz (fabiosantos673@gmail.com) </span>
+  </div>
+</footer>
