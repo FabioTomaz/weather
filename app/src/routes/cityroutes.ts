@@ -4,8 +4,8 @@ import * as cityController from '../controllers/city';
 const route = Router();
 
 export default (app: Router) => {
-  app.use(route);
+  route.get('/data', cityController.getCitiesData);
+  route.get('/data/:cityName', cityController.getCityData);
 
-  route.get('cities', cityController.getCitiesWeather);
-  route.get('cities/:cityName', cityController.getCityByName);
+  app.use(route);
 };

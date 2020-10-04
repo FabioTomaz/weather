@@ -1,71 +1,81 @@
 import config from '../config';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
+import { WeatherResponse } from "../models/weather";
+import { RisesResponse } from "../models/rises";
 
 
 /**
- * Get city by city name
- *
- * cities List The numbers of items to return (optional)
- * returns City[]
- **/
-export function getCitiesWeather(cities) {
-  return new Promise(function (resolve, reject) {
-    Promise.all(cities.map((city) => getCityByName(city)))
-      .then(function(arrayOfValuesOrErrors) {
-        resolve(arrayOfValuesOrErrors);
-      })
-      .catch(function(err) {
-        console.log(err.message); // some coding error in handling happened
-        reject(err.message);
-      });
-  });
-}
-
-
-/**
- * Get city by city name
+ * Get city data
  *
  * cityName String The name that needs to be fetched. Use Aveiro for testing.
  * returns City
  **/
-export function getCityByName(cityName) {
-  return new Promise(function (resolve, reject) {
-    getCityNameData(cityName).then((cityValue) => {
-      resolve(cityValue);
-    }).catch((error) => {
-      reject(error);
+export function getCityData(cityName: string) {
+  return getCityWeather(cityName).then((cityWeather) => {
+    return getCitySunriseSunset(cityWeather[ "lat" ], cityWeather[ "lng" ]).then((cityRise) => {
+      return {
+        ...cityWeather,
+        ...cityRise
+      };
+    });
+  }).catch(function (error) {
+    throw(error);
+  });
+}
+
+
+/**
+ * Get city weather
+ *
+ * cityName String The name that needs to be fetched. Use Aveiro for testing.
+ * returns Promise<CityWeather>
+ **/
+function getCityWeather(cityName: string) {
+  return axios.get<WeatherResponse>(`http://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${config.api.openWeatherAPIKey}`).then((cityWeatherResponse) => {
+    if (cityWeatherResponse.status != 200) {
+      const err = new Error(cityWeatherResponse.statusText);
+      err[ 'status' ] = cityWeatherResponse.status;
+      throw err;
+    }
+
+    return {
+      id: cityWeatherResponse.data.id,
+      name: cityWeatherResponse.data.name,
+      temp: cityWeatherResponse.data.main.temp,
+      lat: cityWeatherResponse.data.coord.lat,
+      lng: cityWeatherResponse.data.coord.lon,
+    };
+  }).catch(function (error) {
+    throw({
+      status: error.response.status,
+      message: error.message
     });
   });
 }
 
-async function getCityNameData(cityName) {
-  console.log("request city name >> " + cityName);
+/**
+ * Get city sunrise and sunset
+ *
+ * lat Number The latitude of the city.
+ * lng Number The longitude of the city.
+ * returns Promise<CityRises>
+ **/
+function getCitySunriseSunset(lat: number, lng: number) {
+  return axios.get<RisesResponse>(`https://api.sunrise-sunset.org/json?&lat=${lat}&lng=${lng}`).then((cityRisesResponse: AxiosResponse<RisesResponse>) => {
+    if (cityRisesResponse.status != 200) {
+      const err = new Error(cityRisesResponse.statusText);
+      err[ 'status' ] = cityRisesResponse.status;
+      throw err;
+    }
 
-  let resp = {
-    "cityName": null,
-    "lat": null,
-    "lng": null,
-    "temp": null,
-    "sunset": null,
-    "sunrise": null,
-  };
-
-  try {
-    // Make a request for a user with a given ID
-    let cityWeatherResponse = await axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${config.api.openWeatherAPIKey}`);
-    resp[ "lat" ] = cityWeatherResponse[ "coord" ][ "lat" ];
-    resp[ "lng" ] = cityWeatherResponse[ "coord" ][ "lng" ];
-    resp[ "temp" ] = cityWeatherResponse[ "main" ][ "temp" ];
-  } catch {
-    console.log("request error >> " + cityName);
-    return null;
-  }
-  try {
-    let citySunriseSunsetResponse = await axios.get(`https://api.sunrise-sunset.org/json?&lat=${resp[ "lat" ]}&lng=${resp[ "lng" ]}`);
-    resp[ "sunset" ] = citySunriseSunsetResponse[ "results" ][ "sunset" ];
-    resp[ "sunrise" ] = citySunriseSunsetResponse[ "results" ][ "sunrise" ];
-  } catch {
-
-  }
-  return resp;
+    return {
+      sunrise: cityRisesResponse.data.results.sunrise,
+      sunset: cityRisesResponse.data.results.sunset
+    }
+  }).catch(function (error) {
+    throw({
+      status: error.response.status,
+      message: error.message
+    });
+  });
 }
