@@ -1,54 +1,60 @@
-import { Component, ElementRef, ViewChild, OnInit, OnChanges, Input } from '@angular/core';
+import { Component, ElementRef, ViewChild, OnInit, OnChanges, Input, AfterViewInit } from '@angular/core';
 import { City } from '../model/city';
 import * as d3 from 'd3';
+import { ReplaySubject } from "rxjs";
 
 @Component({
   selector: 'app-bar-plot',
   templateUrl: './bar-plot.component.html',
-  styleUrls: ['./bar-plot.component.scss']
+  styleUrls: [ './bar-plot.component.scss' ]
 })
-export class BarPlotComponent implements OnInit, OnChanges {
+export class BarPlotComponent implements AfterViewInit {
 
-  @Input() cities: City[];
+  private citiesObserver = new ReplaySubject<City[]>(1);
 
-  @ViewChild('barChart', {static: false})
-  private chartContainer: ElementRef;
-
-  margin = { top: 20, right: 20, bottom: 30, left: 40 };
-
-  constructor() { }
-
-  ngOnInit() { }
-
-  ngOnChanges(): void {
-    if (!this.cities) { return; }
-
-    this.createChart();
+  @Input() set cities(cities: City[]) {
+    this.citiesObserver.next(cities);
   }
 
-  private createChart(): void {
-    d3.select('svg').remove();
+  @ViewChild('barChart')
+  private chartContainer: ElementRef;
 
+  margin = {top: 10, right: 20, bottom: 30, left: 40};
+
+  constructor() {
+  }
+
+  ngAfterViewInit(): void {
+    this.citiesObserver.subscribe((cities) => {
+      this.createChart(cities);
+    });
+  }
+
+  private createChart(cities: City[]): void {
     const element = this.chartContainer.nativeElement;
-    const data = this.cities;
+    d3.select(element).select('svg').remove();
+
+    const data = cities;
 
     const svg = d3.select(element).append('svg')
       .attr('width', element.offsetWidth)
-      .attr('height', element.offsetHeight);
+      .attr('height', 250);
 
     const contentWidth = element.offsetWidth - this.margin.left - this.margin.right;
     const contentHeight = element.offsetHeight - this.margin.top - this.margin.bottom;
 
     const x = d3
       .scaleBand()
-      .rangeRound([0, contentWidth])
+      .rangeRound([ 0, contentWidth ])
       .padding(0.1)
-      .domain(<ReadonlyArray<string>>data.map(d => d.cityName));
+      .domain(<ReadonlyArray<string>>data.map(d => d.name));
 
+    // max value + 20%
+    const maxVal = 1.2 * d3.max(data, d => d.temp);
     const y = d3
       .scaleLinear()
-      .rangeRound([contentHeight, 0])
-      .domain([0, d3.max(data, d => d.temperature)]);
+      .rangeRound([ contentHeight, 0 ])
+      .domain([ 0, maxVal ]);
 
     const g = svg.append('g')
       .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')');
@@ -60,11 +66,11 @@ export class BarPlotComponent implements OnInit, OnChanges {
 
     g.append('g')
       .attr('class', 'axis axis--y')
-      .call(d3.axisLeft(y).ticks(10, '%'))
+      .call(d3.axisLeft(y).ticks(10, ".2f"))
       .append('text')
       .attr('transform', 'rotate(-90)')
       .attr('y', 6)
-      .attr('dy', '0.71em')
+      .attr('dy', '1em')
       .attr('text-anchor', 'end')
       .text('Frequency');
 
@@ -72,10 +78,19 @@ export class BarPlotComponent implements OnInit, OnChanges {
       .data(data)
       .enter().append('rect')
       .attr('class', 'bar')
-      .attr('x', d => x(d.cityName))
-      .attr('y', d => y(d.temperature))
+      .attr('x', d => x(d.name))
+      .attr('y', d => y(d.temp))
       .attr('width', x.bandwidth())
-      .attr('height', d => contentHeight - y(d.temperature));
+      .attr('height', d => contentHeight - y(d.temp));
+
+    g.selectAll("text.bar")
+      .data(data)
+      .enter().append("text")
+      .attr("class", "bar")
+      .attr("text-anchor", "middle")
+      .attr("x", function(d) { return x(d.name); })
+      .attr("y", function(d) { return y(d.temp) - 5; })
+      .text(function(d) { return d.temp; });
   }
 
 }

@@ -1,7 +1,9 @@
 export interface City {
-    id?: number;
-    cityName?: string;
-    temperature?: number;
-    sunset?: string;
-    sunrise?: string;
+  id: number;
+  name: string;
+  temp?: number;
+  sunrise?: string | Date;
+  sunset?: string | Date;
+  lat?: number;
+  lng?: number;
 }

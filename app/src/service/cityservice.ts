@@ -3,6 +3,13 @@ import axios, { AxiosResponse } from 'axios';
 import { WeatherResponse } from "../models/weather";
 import { RisesResponse } from "../models/rises";
 
+const openWeatherMapAPI = axios.create({
+  baseURL: 'http://api.openweathermap.org/'
+});
+
+const sunAPI = axios.create({
+  baseURL: 'https://api.sunrise-sunset.org/'
+});
 
 /**
  * Get city data
@@ -23,7 +30,6 @@ export function getCityData(cityName: string) {
   });
 }
 
-
 /**
  * Get city weather
  *
@@ -31,7 +37,7 @@ export function getCityData(cityName: string) {
  * returns Promise<CityWeather>
  **/
 function getCityWeather(cityName: string) {
-  return axios.get<WeatherResponse>(`http://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${config.api.openWeatherAPIKey}`).then((cityWeatherResponse) => {
+  return openWeatherMapAPI.get<WeatherResponse>(`/data/2.5//weather?units=metric&q=${cityName}&appid=${config.api.openWeatherAPIKey}`).then((cityWeatherResponse) => {
     if (cityWeatherResponse.status != 200) {
       const err = new Error(cityWeatherResponse.statusText);
       err[ 'status' ] = cityWeatherResponse.status;
@@ -61,7 +67,7 @@ function getCityWeather(cityName: string) {
  * returns Promise<CityRises>
  **/
 function getCitySunriseSunset(lat: number, lng: number) {
-  return axios.get<RisesResponse>(`https://api.sunrise-sunset.org/json?&lat=${lat}&lng=${lng}`).then((cityRisesResponse: AxiosResponse<RisesResponse>) => {
+  return sunAPI.get<RisesResponse>(`/json?&lat=${lat}&lng=${lng}`).then((cityRisesResponse: AxiosResponse<RisesResponse>) => {
     if (cityRisesResponse.status != 200) {
       const err = new Error(cityRisesResponse.statusText);
       err[ 'status' ] = cityRisesResponse.status;

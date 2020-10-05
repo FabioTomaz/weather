@@ -10,6 +10,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
+import { MatSortModule } from '@angular/material/sort';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -17,14 +19,17 @@ import { TableComponent } from './table/table.component';
 import { BarPlotComponent } from './bar-plot/bar-plot.component';
 import { FormComponent } from './form/form.component';
 import { CityService } from './api/city.service';
-import { HttpClientModule } from "@angular/common/http";
+import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
+import { CustomHttpInterceptor } from "./api/http-interceptor";
+import { SpinnerComponent } from './spinner/spinner.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TableComponent,
     BarPlotComponent,
-    FormComponent
+    FormComponent,
+    SpinnerComponent
   ],
   imports: [
     BrowserModule,
@@ -36,15 +41,23 @@ import { HttpClientModule } from "@angular/common/http";
     MatInputModule,
     MatIconModule,
     MatCardModule,
+    MatSortModule,
+    MatProgressSpinnerModule,
     FormsModule,
     BrowserAnimationsModule,
     HttpClientModule
   ],
   providers: [
     CityService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: CustomHttpInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [
     AppComponent
   ]
 })
-export class AppModule { }
+export class AppModule {
+}

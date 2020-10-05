@@ -1,6 +1,6 @@
 
 <div class="mat-elevation-z8">
-  <table mat-table [dataSource]="dataSource" matSort>
+  <table mat-table [dataSource]="dataSource | async" matSort>
 
     <!-- Name Column -->
     <ng-container matColumnDef="name">
@@ -9,21 +9,21 @@
     </ng-container>
 
     <!-- Temperature Column -->
-    <ng-container matColumnDef="temperature">
+    <ng-container matColumnDef="temp">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Temperature </th>
-      <td mat-cell *matCellDef="let row"> {{row.temperature}} </td>
+      <td mat-cell *matCellDef="let row"> {{row.temp}}ºC </td>
     </ng-container>
 
     <!-- Sunset Column -->
     <ng-container matColumnDef="sunset">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Sunset </th>
-      <td mat-cell *matCellDef="let row"> {{row.sunset}} </td>
+      <td mat-cell *matCellDef="let row"> {{row.sunset | date:'HH:MM:SS'}} </td>
     </ng-container>
 
     <!-- Sunrise Column -->
     <ng-container matColumnDef="sunrise">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Sunrise </th>
-      <td mat-cell *matCellDef="let row" [style.color]="row.sunrise"> {{row.sunrise}} </td>
+      <td mat-cell *matCellDef="let row"> {{row.sunrise | date:'HH:MM:SS'}} </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -35,5 +35,5 @@
     </tr>
   </table>
 
-  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+  <mat-paginator [pageSizeOptions]="[3, 5, 10, 50]"></mat-paginator>
 </div>

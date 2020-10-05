@@ -18,5 +18,5 @@ export interface CityData {
   sunrise?: string;
   sunset?: string;
   lat?: number;
-  lng?: number
+  lng?: number;
 }

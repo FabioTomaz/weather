@@ -3,17 +3,18 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { CustomHttpUrlEncodingCodec } from '../encoder';
 
 import { Observable } from 'rxjs';
-
+import * as moment from "moment";
 import { City } from '../model/city';
 
 import { BASE_PATH } from '../variables';
 import { Configuration } from '../configuration';
+import { map } from "rxjs/operators";
 
 
 @Injectable()
 export class CityService {
 
-  protected basePath = 'https://localhost:4200/data';
+  protected basePath = 'http://localhost:3000/api/data';
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
 
@@ -57,13 +58,20 @@ export class CityService {
       headers = headers.set('Accept', httpHeaderAcceptSelected);
     }
 
-    return this.httpClient.request<City[]>('get', `${this.basePath}/cities`,
+    return this.httpClient.request<City[]>('get', `${this.basePath}`,
       {
         params: queryParameters,
         withCredentials: this.configuration.withCredentials,
         headers: headers
       }
-    );
+    ).pipe(map((result)=> {
+      return result.map((cityData) => {
+        cityData.temp = <number>cityData.temp;
+        cityData.sunrise =  moment(<string>cityData.sunrise, "hh:mm:ss A").toDate();
+        cityData.sunset =  moment(<string>cityData.sunset, "hh:mm:ss A").toDate();
+        return cityData;
+      });
+    }));
   }
 
   /**
@@ -89,7 +97,7 @@ export class CityService {
       headers = headers.set('Accept', httpHeaderAcceptSelected);
     }
 
-    return this.httpClient.request<City>('get', `${this.basePath}/cities/${encodeURIComponent(String(cityName))}`,
+    return this.httpClient.request<City>('get', `${this.basePath}/${encodeURIComponent(String(cityName))}`,
       {
         withCredentials: this.configuration.withCredentials,
         headers: headers

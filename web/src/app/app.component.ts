@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CityService } from "./api/city.service";
+import { SpinnerService, CityService } from "./api";
 import { BehaviorSubject } from "rxjs";
 
 @Component({
@@ -10,8 +10,10 @@ import { BehaviorSubject } from "rxjs";
 export class AppComponent {
   cities = new BehaviorSubject([]);
 
-  constructor(private cityService: CityService) {
-
+  constructor(
+    private cityService: CityService,
+    public spinnerService: SpinnerService
+  ) {
   }
 
   onCitiesChange(cities: string[]) {

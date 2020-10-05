@@ -5,12 +5,18 @@
     </a>
   </nav>
 
+  <!--<mat-spinner [diameter]="50" *ngIf="spinnerService.visibility | async"></mat-spinner>-->
+
   <div class="container">
     <app-form (citiesChange)="onCitiesChange($event)"></app-form>
     <hr/>
-    <div *ngIf="(cities | async).length > 0" class="results">
-      <app-table [cities]="(cities | async)"></app-table>
-      <app-bar-plot [cities]="(cities | async)"></app-bar-plot>
+    <div *ngIf="(cities | async).length > 0" class="results row">
+      <div class="col-sm-6">
+        <app-table [cities]="(cities | async)"></app-table>
+      </div>
+      <div class="col-sm-6">
+        <app-bar-plot class="col-sm-6" [cities]="(cities | async)"></app-bar-plot>
+      </div>
     </div>
   </div>
 </main>
