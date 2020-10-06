@@ -37,7 +37,7 @@ export function getCityData(cityName: string) {
  * returns Promise<CityWeather>
  **/
 function getCityWeather(cityName: string) {
-  return openWeatherMapAPI.get<WeatherResponse>(`/data/2.5//weather?units=metric&q=${cityName}&appid=${config.api.openWeatherAPIKey}`).then((cityWeatherResponse) => {
+  return openWeatherMapAPI.get<WeatherResponse>(`/data/2.5/weather?units=metric&q=${cityName}&appid=${config.api.openWeatherAPIKey}`).then((cityWeatherResponse) => {
     if (cityWeatherResponse.status != 200) {
       const err = new Error(cityWeatherResponse.statusText);
       err[ 'status' ] = cityWeatherResponse.status;

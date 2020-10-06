@@ -64,11 +64,11 @@ export class CityService {
         withCredentials: this.configuration.withCredentials,
         headers: headers
       }
-    ).pipe(map((result)=> {
+    ).pipe(map((result) => {
       return result.map((cityData) => {
         cityData.temp = <number>cityData.temp;
-        cityData.sunrise =  moment(<string>cityData.sunrise, "hh:mm:ss A").toDate();
-        cityData.sunset =  moment(<string>cityData.sunset, "hh:mm:ss A").toDate();
+        cityData.sunrise = moment(<string>cityData.sunrise, "hh:mm:ss A").toDate();
+        cityData.sunset = moment(<string>cityData.sunset, "hh:mm:ss A").toDate();
         return cityData;
       });
     }));
@@ -102,7 +102,12 @@ export class CityService {
         withCredentials: this.configuration.withCredentials,
         headers: headers
       }
-    );
+    ).pipe(map((cityData) => {
+      cityData.temp = <number>cityData.temp;
+      cityData.sunrise = moment(<string>cityData.sunrise, "hh:mm:ss A").toDate();
+      cityData.sunset = moment(<string>cityData.sunset, "hh:mm:ss A").toDate();
+      return cityData;
+    }));
   }
 
 }

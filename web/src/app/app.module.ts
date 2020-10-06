@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -22,6 +22,9 @@ import { CityService } from './api/city.service';
 import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { CustomHttpInterceptor } from "./api/http-interceptor";
 import { SpinnerComponent } from './spinner/spinner.component';
+import { DialogComponent } from './form/dialog/dialog.component';
+import { MatDialogModule } from "@angular/material";
+import { NameTakenValidatorDirective } from "./form/name-taken-validator";
 
 @NgModule({
   declarations: [
@@ -29,7 +32,9 @@ import { SpinnerComponent } from './spinner/spinner.component';
     TableComponent,
     BarPlotComponent,
     FormComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    DialogComponent,
+    NameTakenValidatorDirective
   ],
   imports: [
     BrowserModule,
@@ -42,8 +47,10 @@ import { SpinnerComponent } from './spinner/spinner.component';
     MatIconModule,
     MatCardModule,
     MatSortModule,
+    MatDialogModule,
     MatProgressSpinnerModule,
     FormsModule,
+    ReactiveFormsModule,
     BrowserAnimationsModule,
     HttpClientModule
   ],

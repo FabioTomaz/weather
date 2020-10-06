@@ -88,9 +88,15 @@ export class BarPlotComponent implements AfterViewInit {
       .enter().append("text")
       .attr("class", "bar")
       .attr("text-anchor", "middle")
-      .attr("x", function(d) { return x(d.name); })
-      .attr("y", function(d) { return y(d.temp) - 5; })
-      .text(function(d) { return d.temp; });
+      .attr("x", function (d) {
+        return x(d.name) + x.bandwidth() / 2;
+      })
+      .attr("y", function (d) {
+        return y(d.temp) - 5;
+      })
+      .text(function (d) {
+        return d.temp;
+      });
   }
 
 }

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { SpinnerService, CityService } from "./api";
+import { SpinnerService } from "./api";
 import { BehaviorSubject } from "rxjs";
+import { City } from "./model/city";
 
 @Component({
   selector: 'app-root',
@@ -8,18 +9,14 @@ import { BehaviorSubject } from "rxjs";
   styleUrls: [ './app.component.scss' ]
 })
 export class AppComponent {
-  cities = new BehaviorSubject([]);
+  cities = new BehaviorSubject<City[]>([]);
 
   constructor(
-    private cityService: CityService,
     public spinnerService: SpinnerService
   ) {
   }
 
-  onCitiesChange(cities: string[]) {
-    this.cityService.getCitiesWeather(cities).subscribe((citiesResponse) => {
-      console.log(citiesResponse);
-      this.cities.next(citiesResponse);
-    });
+  onCitiesChange(cities: City[]) {
+      this.cities.next(cities);
   }
 }
