@@ -1,7 +1,7 @@
 # NodeJS API 
 
 ## Overview
-A simple nodeJS api for retrieving weather, sunset and sunrise data.
+This is the NodeJS api gateway for retrieving weather, sunset and sunrise data.
 
 ### Setup
 You must first install all the dependencies using:

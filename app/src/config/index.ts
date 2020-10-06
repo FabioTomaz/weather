@@ -27,7 +27,7 @@ export default {
    * API configs
    */
   api: {
-    prefix: '/api',
+    apiPrefix: '/api/data',
     openWeatherAPIKey: process.env.OPENWEATHER_API_KEY
   },
 };

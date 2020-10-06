@@ -1,11 +1,12 @@
 import { Router } from 'express';
 import * as cityController from '../controllers/city';
+import config from '../config';
 
 const route = Router();
 
 export default (app: Router) => {
-  route.get('/data', cityController.getCitiesData);
-  route.get('/data/:cityName', cityController.getCityData);
+  route.get(config.api.apiPrefix, cityController.getCitiesData);
+  route.get(config.api.apiPrefix + '/:cityName', cityController.getCityData);
 
   app.use(route);
 };

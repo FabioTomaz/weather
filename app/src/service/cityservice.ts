@@ -1,5 +1,5 @@
 import config from '../config';
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosResponse } from "axios";
 import { WeatherResponse } from "../models/weather";
 import { RisesResponse } from "../models/rises";
 
