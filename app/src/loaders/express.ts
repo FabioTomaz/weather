@@ -5,7 +5,6 @@ import routes from '../routes';
 import fs from 'fs';
 import morgan from 'morgan';
 import path from 'path';
-import * as oas3Tools from 'oas3-tools';
 
 export default ({ app }: { app: express.Application }) => {
   /**
