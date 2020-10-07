@@ -16,3 +16,13 @@ For running the Angular frontend:
 cd web
 npm start
 ```
+### Seeing the results
+
+The api located at:
+```
+http://localhost:3000
+```
+The frontend is located at:
+```
+http://localhost:4200
+```
