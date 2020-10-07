@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from "@angular/forms";
-import { CityService } from "../api";
+import { CityService, SpinnerService } from "../api";
 import { MatDialog } from "@angular/material";
 import { DialogComponent } from "./dialog/dialog.component";
 import { City } from "../model/city";
@@ -11,9 +11,7 @@ import { City } from "../model/city";
   templateUrl: './form.component.html',
   styleUrls: [ './form.component.css' ]
 })
-export class FormComponent implements OnInit {
-
-  citiesForm: FormGroup;
+export class FormComponent {
 
   cityInput: string;
 
@@ -24,22 +22,10 @@ export class FormComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private cityService: CityService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    public spinnerService: SpinnerService
   ) {
   }
-
-  ngOnInit(): void {
-    // this.citiesForm = new FormGroup({
-    //   name: new FormControl(this.cityInput, [
-    //     Validators.pattern("^[a-zA-Z\\s]*$"),
-    //     // this.isCityNameTaken
-    //   ])
-    // });
-  }
-
-  // get name() {
-  //   return this.citiesForm.get('name');
-  // }
 
   onRemove(item: City) {
     const index = this.cities.indexOf(item);
@@ -65,24 +51,6 @@ export class FormComponent implements OnInit {
   confirmCities() {
     this.citiesChange.emit(this.cities);
   }
-
-  // Correct validator funcion
-  isCityNameTaken(component: AbstractControl): ValidationErrors {
-    this.cities.find(city => {
-      if (city.name === this.cityInput.toLowerCase()) {
-        // found the city
-        return {
-          cityNameTaken: {
-            valid: false
-          }
-        };
-      }
-    });
-
-    // Everything is ok
-    return null;
-  }
-
 
   openDialog(title: string, message: string): void {
     const dialogRef = this.dialog.open(DialogComponent, {

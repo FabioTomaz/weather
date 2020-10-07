@@ -7,7 +7,7 @@ This is the NodeJS api gateway for retrieving weather, sunset and sunrise data.
 You must first install all the dependencies using:
 
 ```
-npm isntall
+npm install
 ```
 
 ### Running the server
@@ -18,8 +18,8 @@ npm start
 ```
 
 ### Documentation
-To view the Swagger UI interface:
+The documentation of the api is described in OpenAPI 3.0 at doc/openapi.yaml and available at:
 
 ```
-open http://localhost:8080/docs
+https://app.swaggerhub.com/apis/FabioTomaz/Weather/1.0.0#/
 ```

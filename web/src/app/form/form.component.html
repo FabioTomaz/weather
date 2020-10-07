@@ -1,12 +1,20 @@
 <div class="col-sm-12">
   <mat-form-field class="col-sm-8">
     <mat-label>City Name</mat-label>
-    <input matInput [appNameTaken]="cities" id="name" placeholder="Ex. London" [(ngModel)]="cityInput" #name="ngModel">
+    <input matInput [appNameTaken]="cities" pattern="^[a-zA-Z\s]+$" id="name" placeholder="Ex. London" [(ngModel)]="cityInput" #name="ngModel">
     <mat-error *ngIf="name.hasError('nameTaken')">
       City name is already in list!
     </mat-error>
+    <mat-error *ngIf="name.hasError('pattern')">
+      Invalid city name!
+    </mat-error>
   </mat-form-field>
-  <button mat-flat-button color="primary" class="col-sm-4" [disabled]="name.errors" (click)="addCity()">Add</button>
+  <button mat-flat-button
+          class="col-sm-4"
+          color="primary"
+          [loading]="spinnerService.visibility | async"
+          [disabled]="name.errors"
+          (click)="addCity()">Add</button>
 
   <div *ngIf="cities.length>0" class="col-sm-12" >
     <mat-list role="list" #citiesList>

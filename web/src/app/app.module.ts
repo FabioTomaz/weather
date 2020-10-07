@@ -21,10 +21,10 @@ import { FormComponent } from './form/form.component';
 import { CityService } from './api/city.service';
 import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { CustomHttpInterceptor } from "./api/http-interceptor";
-import { SpinnerComponent } from './spinner/spinner.component';
 import { DialogComponent } from './form/dialog/dialog.component';
 import { MatDialogModule } from "@angular/material";
 import { NameTakenValidatorDirective } from "./form/name-taken-validator";
+import { MatButtonLoadingDirective } from './form/loading/mat-button-loading.directive';
 
 @NgModule({
   declarations: [
@@ -32,9 +32,9 @@ import { NameTakenValidatorDirective } from "./form/name-taken-validator";
     TableComponent,
     BarPlotComponent,
     FormComponent,
-    SpinnerComponent,
     DialogComponent,
-    NameTakenValidatorDirective
+    NameTakenValidatorDirective,
+    MatButtonLoadingDirective
   ],
   imports: [
     BrowserModule,

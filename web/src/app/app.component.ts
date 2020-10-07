@@ -1,6 +1,5 @@
-import { Component } from '@angular/core';
-import { SpinnerService } from "./api";
-import { BehaviorSubject } from "rxjs";
+import { Component, OnInit } from '@angular/core';
+import { ReplaySubject, BehaviorSubject } from "rxjs";
 import { City } from "./model/city";
 
 @Component({
@@ -8,15 +7,17 @@ import { City } from "./model/city";
   templateUrl: './app.component.html',
   styleUrls: [ './app.component.scss' ]
 })
-export class AppComponent {
-  cities = new BehaviorSubject<City[]>([]);
+export class AppComponent implements OnInit {
+  public cities = new BehaviorSubject<City[]>([]);
 
-  constructor(
-    public spinnerService: SpinnerService
-  ) {
+  constructor() {
+  }
+
+  ngOnInit() {
+    this.cities.subscribe();
   }
 
   onCitiesChange(cities: City[]) {
-      this.cities.next(cities);
+    this.cities.next(JSON.parse(JSON.stringify(cities)));
   }
 }

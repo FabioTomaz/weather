@@ -38,7 +38,7 @@ export class BarPlotComponent implements AfterViewInit {
 
     const svg = d3.select(element).append('svg')
       .attr('width', element.offsetWidth)
-      .attr('height', 250);
+      .attr('height', 290);
 
     const contentWidth = element.offsetWidth - this.margin.left - this.margin.right;
     const contentHeight = element.offsetHeight - this.margin.top - this.margin.bottom;
@@ -70,7 +70,7 @@ export class BarPlotComponent implements AfterViewInit {
       .append('text')
       .attr('transform', 'rotate(-90)')
       .attr('y', 6)
-      .attr('dy', '1em')
+      .attr('dy', '0.75em')
       .attr('text-anchor', 'end')
       .text('Frequency');
 

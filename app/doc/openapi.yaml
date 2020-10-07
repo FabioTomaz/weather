@@ -1,103 +1,69 @@
 openapi: 3.0.0
 info:
-  title: Wrather, Sunset, Sunrise API
   description: |
     This is a sample Weather server.
-  termsOfService: http://swagger.io/terms/
+  version: "1.0.0"
+  title: Weather, Sunset, Sunrise API
+  termsOfService: 'http://swagger.io/terms/'
   contact:
     email: fabiosantos673@gmail.com
-  license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 1.0.0
 servers:
-- url: https://virtserver.swaggerhub.com/FabioTomaz/Weather/1.0.0
-  description: SwaggerHub API Auto Mocking
-- url: https://localhost:4201
-  description: Weather API
+# Added by API Auto Mocking Plugin
+- description: SwaggerHub API Auto Mocking
+  url: https://virtserver.swaggerhub.com/FabioTomaz/Weather/1.0.0
+- description: Localhost
+  url: 'http://localhost:3000'
 tags:
 - name: city
   description: Operations about cities
 paths:
-  /cities:
+  /api/data:
     get:
       tags:
       - city
       summary: Get city by city name
-      operationId: getCitiesWeather
+      operationId: getCitiesData
       parameters:
-      - name: sortBy
-        in: query
-        description: The name of the property to sort
-        required: false
-        style: form
-        explode: true
+      - in: query
+        name: cities
         schema:
-          type: string
-        example: temperature
-      - name: sortOrder
-        in: query
-        description: The sorting order ("asc" or "desc")
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
-        example: asc
-      - name: cities
-        in: query
-        description: The numbers of items to return
-        required: false
-        style: form
-        explode: true
-        schema:
-          minItems: 3
           type: array
-          example:
-          - Aveiro
-          - London
-          - New York
           items:
             type: string
+          example: ["Aveiro", "London", "New York"]
+        description: The numbers of items to return
       responses:
-        "200":
+        '200':
           description: successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/CityArray'
-        "400":
-          description: Invalid city supplied
-        "404":
-          description: City not found
-      x-swagger-router-controller: City
-  /cities/{cityName}:
+        '404':
+          description: One of the cities were not found
+  '/api/data/{cityName}':
     get:
       tags:
       - city
       summary: Get city by city name
-      operationId: getCityByName
+      operationId: getCityData
       parameters:
       - name: cityName
         in: path
         description: The name that needs to be fetched. Use Aveiro for testing.
         required: true
-        style: simple
-        explode: false
+        example: "Aveiro"
         schema:
           type: string
       responses:
-        "200":
+        '200':
           description: successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/City'
-        "400":
-          description: Invalid city supplied
-        "404":
+        '404':
           description: City not found
-      x-swagger-router-controller: City
 components:
   schemas:
     City:
@@ -106,22 +72,20 @@ components:
         id:
           type: integer
           format: int64
-        cityName:
+        name:
           type: string
-        temperature:
+        temp:
           type: string
+        lat:
+          type: number
+        lng:
+          type: number
         sunset:
           type: string
         sunrise:
           type: string
-      example:
-        sunrise: sunrise
-        cityName: cityName
-        sunset: sunset
-        temperature: temperature
-        id: 0
     CityArray:
       type: array
-      description: List of city object
       items:
         $ref: '#/components/schemas/City'
+      description: List of city object
