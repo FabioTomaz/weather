@@ -19,7 +19,7 @@ export class BarPlotComponent implements AfterViewInit {
   @ViewChild('barChart')
   private chartContainer: ElementRef;
 
-  margin = {top: 10, right: 20, bottom: 30, left: 40};
+  margin = {top: 30, right: 40, bottom: 50, left: 60};
 
   constructor() {
   }
@@ -38,7 +38,7 @@ export class BarPlotComponent implements AfterViewInit {
 
     const svg = d3.select(element).append('svg')
       .attr('width', element.offsetWidth)
-      .attr('height', 290);
+      .attr('height', 300);
 
     const contentWidth = element.offsetWidth - this.margin.left - this.margin.right;
     const contentHeight = element.offsetHeight - this.margin.top - this.margin.bottom;
@@ -57,23 +57,17 @@ export class BarPlotComponent implements AfterViewInit {
       .domain([ 0, maxVal ]);
 
     const g = svg.append('g').attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')');
-    
-    // text label for the x axis
-    svg.append("text")             
-      .attr("transform",
-            "translate(" + (contentWidth/2) + " ," + 
-                           (contentHeight + this.margin.top + 30) + ")")
-      .style("text-anchor", "middle")
-      .text("City");
 
     // text label for the y axis
-    svg.append("text")
+    svg.append("g")
+    .attr("class", "y axis")
+    .call(y)
+    .append("text")
     .attr("transform", "rotate(-90)")
-    .attr("y", 0 - 10)
-    .attr("x",0 - (contentHeight / 2))
-    .attr("dy", "1em")
-    .style("text-anchor", "middle")
-    .text("Temperature (*C)");      
+    .attr("y", 6)
+    .attr("dy", ".71em")
+    .style("text-anchor", "end")
+    .text("Temperature (ºC)");
 
     g.append('g')
       .attr('class', 'axis axis--x')
