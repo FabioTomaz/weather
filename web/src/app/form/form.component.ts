@@ -43,6 +43,10 @@ export class FormComponent {
       (error) => {
         if (error.status === 404) {
           this.openDialog("City does not exist!", null);
+        } else if (error.status === 500) {
+          this.openDialog("Server error! Please contact support!", null);
+        } else {
+          this.openDialog("Unable to reach server API!", null);
         }
       }
     );

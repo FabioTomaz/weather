@@ -56,8 +56,24 @@ export class BarPlotComponent implements AfterViewInit {
       .rangeRound([ contentHeight, 0 ])
       .domain([ 0, maxVal ]);
 
-    const g = svg.append('g')
-      .attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')');
+    const g = svg.append('g').attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')');
+    
+    // text label for the x axis
+    svg.append("text")             
+      .attr("transform",
+            "translate(" + (contentWidth/2) + " ," + 
+                           (contentHeight + this.margin.top + 30) + ")")
+      .style("text-anchor", "middle")
+      .text("City");
+
+    // text label for the y axis
+    svg.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0 - 10)
+    .attr("x",0 - (contentHeight / 2))
+    .attr("dy", "1em")
+    .style("text-anchor", "middle")
+    .text("Temperature (*C)");      
 
     g.append('g')
       .attr('class', 'axis axis--x')
@@ -97,6 +113,8 @@ export class BarPlotComponent implements AfterViewInit {
       .text(function (d) {
         return d.temp;
       });
+
+      
   }
 
 }
