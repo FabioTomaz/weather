@@ -59,15 +59,15 @@ export class BarPlotComponent implements AfterViewInit {
     const g = svg.append('g').attr('transform', 'translate(' + this.margin.left + ',' + this.margin.top + ')');
 
     // text label for the y axis
-    svg.append("g")
-    .attr("class", "y axis")
-    .call(y)
-    .append("text")
-    .attr("transform", "rotate(-90)")
-    .attr("y", 6)
-    .attr("dy", ".71em")
-    .style("text-anchor", "end")
-    .text("Temperature (ºC)");
+    // svg.append("g")
+    // .attr("class", "y axis")
+    // .call(y)
+    //  .append("text")
+    // .attr("transform", "rotate(-90)")
+    // .attr("y", 6)
+    // .attr("dy", ".71em")
+    // .style("text-anchor", "end")
+    // .text("Temperature (ºC)");
 
     g.append('g')
       .attr('class', 'axis axis--x')
